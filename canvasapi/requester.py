@@ -25,7 +25,7 @@ class Requester(object):
     Responsible for handling HTTP requests.
     """
 
-    def __init__(self, base_url, access_token):
+    def __init__(self, base_url, access_token, session):
         """
         :param base_url: The base URL of the Canvas instance's API.
         :type base_url: str
@@ -35,8 +35,18 @@ class Requester(object):
         # Preserve the original base url and add "/api/v1" to it
         self.original_url = base_url
         self.base_url = base_url + "/api/v1/"
-        self.access_token = access_token
-        self._session = requests.Session()
+        if access_token is None:
+            if session is None:
+                raise ValueError(
+                    "Either an access_token or a session must be provided."
+                )
+            else:
+                self._session = session
+                self.type = "session"
+        else:
+            self.access_token = access_token
+            self._session = requests.Session()
+            self.type = "token"
         self._cache = []
 
     def _delete_request(self, url, headers, data=None, **kwargs):
@@ -164,7 +174,7 @@ class Requester(object):
         if not headers:
             headers = {}
 
-        if use_auth:
+        if use_auth and self.type == "token":
             auth_header = {"Authorization": "Bearer {}".format(self.access_token)}
             headers.update(auth_header)
 
