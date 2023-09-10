@@ -35,7 +35,7 @@ class Requester(object):
         # Preserve the original base url and add "/api/v1" to it
         self.original_url = base_url
         self.base_url = base_url + "/api/v1/"
-        if access_token is None:
+        if access_token == '':
             if session is None:
                 raise ValueError(
                     "Either an access_token or a session must be provided."

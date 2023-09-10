@@ -38,7 +38,7 @@ class Canvas(object):
         :param base_url: The base URL of the Canvas instance's API.
         :type base_url: str
         :param access_token: The API key to authenticate requests with.
-        :type access_token: str, None
+        :type access_token: str
         :param session: The session that has already login in the Canvas instance.
         :type session: requests.Session
         """
